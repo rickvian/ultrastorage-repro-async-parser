@@ -31,7 +31,7 @@ npm run build
 
 ## CodeSandbox
 
-After this repository is public, import it directly with [CodeSandbox](https://codesandbox.io/p/sandbox/github/rickvian/ultrastorage-repro-async-parser).
+After this repository is public, import it directly with [CodeSandbox](https://codesandbox.io/p/github/rickvian/ultrastorage-repro-async-parser/main).
 
 ## Minimal source excerpt
 

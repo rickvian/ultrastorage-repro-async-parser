@@ -21,7 +21,7 @@ Expected visible results:
 
 ## CodeSandbox steps
 
-1. Open [the CodeSandbox import URL](https://codesandbox.io/p/sandbox/github/rickvian/ultrastorage-repro-async-parser) after the public repository is available.
+1. Open [the CodeSandbox import URL](https://codesandbox.io/p/github/rickvian/ultrastorage-repro-async-parser/main) after the public repository is available.
 2. Start the development preview.
 3. Open the preview's Developer Tools, run the reproduction, and compare results as above.
 

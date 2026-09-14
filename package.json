@@ -13,7 +13,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "ultrastorage": "^0.8.0"
+    "ultrastorage": "0.8.0"
   },
   "devDependencies": {
     "typescript": "^7.0.2",
