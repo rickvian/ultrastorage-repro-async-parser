@@ -19,7 +19,11 @@ npm install
 npm run dev
 ```
 
-Open the printed local URL, open Developer Tools → Console, and press **Run reproduction**.
+Open the printed local URL, open Developer Tools → Console, then open each case page and press **Run this case**. Each case runs in isolation on its own route and logs only its own events.
+
+- `/` overview that links to both cases
+- `/case/resolved` — Promise resolves to a valid envelope
+- `/case/rejected` — Promise rejects during parsing
 
 ## Verification
 
@@ -44,7 +48,10 @@ storage.setItem('demo', 'raw bytes');
 storage.getItemResult('demo'); // { status: 'unsupported' }
 ```
 
-See [src/reproduction.ts](./src/reproduction.ts) for the complete isolated reproduction and [MANUAL_TESTING.md](./MANUAL_TESTING.md) for browser steps.
+Each case is colocated in its own directory with its reproduction logic, React page, and tests:
+
+- [src/reproduction/resolved/](./src/reproduction/resolved/) — Promise resolves to a valid envelope
+- [src/reproduction/rejected/](./src/reproduction/rejected/) — Promise rejects during parsing
 
 ## Links
 

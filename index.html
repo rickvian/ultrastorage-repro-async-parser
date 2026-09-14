@@ -3,92 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="A browser reproduction of ultrastorage 0.8.0 asynchronous parser handling." />
+    <meta
+      name="description"
+      content="A browser reproduction of ultrastorage 0.8.0 asynchronous parser handling."
+    />
     <title>ultrastorage async parser reproduction</title>
   </head>
   <body>
-    <a class="skip-link" href="#main-content">Skip to results</a>
-    <main id="main-content" class="shell">
-      <header class="masthead">
-        <p class="eyebrow">ultrastorage@0.8.0 · behavior reproduction</p>
-        <h1>Asynchronous custom parsers are accepted as unsupported data</h1>
-        <p class="lede">
-          A custom parser is a synchronous contract. This reproduction shows a Promise result is
-          silently treated as <code>unsupported</code>, and a rejected parser result surfaces as an
-          unhandled browser rejection.
-        </p>
-      </header>
-
-      <section class="action-bar" aria-labelledby="run-title">
-        <div>
-          <h2 id="run-title">Run the reproduction</h2>
-          <p>Open Developer Tools first to compare this timeline with the console.</p>
-        </div>
-        <button id="run-button" type="button">Run reproduction</button>
-      </section>
-
-      <p id="status" class="status" role="status" aria-live="polite">Ready to run.</p>
-
-      <section class="cases" aria-label="Reproduction results">
-        <article class="case-card" aria-labelledby="resolved-title">
-          <header>
-            <p class="case-number">CASE 01</p>
-            <h2 id="resolved-title">Promise resolves to a valid envelope</h2>
-          </header>
-          <div class="comparison">
-            <section class="expected" aria-labelledby="resolved-expected-title">
-              <h3 id="resolved-expected-title">Expected</h3>
-              <p>Throw a clear <code>TypeError</code> saying parsers must be synchronous.</p>
-            </section>
-            <section class="actual" aria-labelledby="resolved-actual-title">
-              <h3 id="resolved-actual-title">Actual</h3>
-              <output id="resolved-actual">Run the reproduction to inspect the result.</output>
-            </section>
-          </div>
-        </article>
-
-        <article class="case-card" aria-labelledby="rejected-title">
-          <header>
-            <p class="case-number">CASE 02</p>
-            <h2 id="rejected-title">Promise rejects during parsing</h2>
-          </header>
-          <div class="comparison">
-            <section class="expected" aria-labelledby="rejected-expected-title">
-              <h3 id="rejected-expected-title">Expected</h3>
-              <p>Reject Promise-like parser output safely and throw the same synchronous-parser error.</p>
-            </section>
-            <section class="actual" aria-labelledby="rejected-actual-title">
-              <h3 id="rejected-actual-title">Actual</h3>
-              <output id="rejected-actual">Run the reproduction to inspect the result.</output>
-            </section>
-          </div>
-        </article>
-      </section>
-
-      <section class="timeline-section" aria-labelledby="timeline-title">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">Chronological evidence</p>
-            <h2 id="timeline-title">Event log</h2>
-          </div>
-          <p>Each event is mirrored to the browser console. The captured error is the intended symptom.</p>
-        </div>
-        <ol id="timeline" class="timeline" aria-live="polite">
-          <li>Awaiting a run.</li>
-        </ol>
-      </section>
-
-      <section class="how-to" aria-labelledby="inspect-title">
-        <h2 id="inspect-title">Inspect it</h2>
-        <p>Open browser Developer Tools, select the Console tab, then run the reproduction. The intentional rejected-parser event is logged with an <code>[reproduction]</code> prefix.</p>
-        <nav aria-label="Project documentation">
-          <a href="./README.md">README</a>
-          <a href="./MANUAL_TESTING.md">Manual testing</a>
-          <a href="https://www.npmjs.com/package/ultrastorage/v/0.8.0">ultrastorage@0.8.0</a>
-          <a href="./src/reproduction.ts">Source</a>
-        </nav>
-      </section>
-    </main>
-    <script type="module" src="/src/main.ts"></script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

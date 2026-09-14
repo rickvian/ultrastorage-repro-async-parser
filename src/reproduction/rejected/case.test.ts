@@ -1,17 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import {
-  installIntentionalRejectionListener,
-  runResolvedParserCase,
-} from './reproduction';
+import { installIntentionalRejectionListener } from './case';
 
-describe('asynchronous parser reproduction', () => {
-  it('shows that a Promise-returning parser is classified as unsupported', () => {
-    const result = runResolvedParserCase();
-
-    expect(result.actual).toBe('{"status":"unsupported"}');
-    expect(result.reproduced).toBe(true);
-  });
-
+describe('rejected parser reproduction', () => {
   it('captures only the intentional rejection and removes its temporary listener', () => {
     const target = new ControlledRejectionTarget();
     const reason = new Error('decode failed');

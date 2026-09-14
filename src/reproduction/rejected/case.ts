@@ -1,23 +1,15 @@
 import { createMemoryStorage, createStorage } from 'ultrastorage';
 
-export type LogLevel = 'info' | 'error';
-
 export interface TimelineEntry {
-  level: LogLevel;
+  level: 'info' | 'error';
   message: string;
 }
 
 export interface ReproductionCase {
-  name: 'resolved parser' | 'rejected parser';
+  name: 'rejected parser';
   expected: string;
   actual: string;
   reproduced: boolean;
-  timeline: TimelineEntry[];
-}
-
-export interface ReproductionResult {
-  resolved: ReproductionCase;
-  rejected: ReproductionCase;
   timeline: TimelineEntry[];
 }
 
@@ -31,50 +23,17 @@ export interface RejectionTarget {
   removeEventListener(type: 'unhandledrejection', listener: (event: RejectionEventLike) => void): void;
 }
 
-export function runResolvedParserCase(): ReproductionCase {
-  const storage = createStorage({
-    storage: createMemoryStorage(),
-    serializer: {
-      stringify: JSON.stringify,
-      parse: () => Promise.resolve(validEnvelope()),
-    },
-  });
-  storage.setItem('demo', 'raw bytes');
-  const result = storage.getItemResult('demo');
-  const actual = JSON.stringify(result);
-
-  return {
-    name: 'resolved parser',
-    expected: 'Throw TypeError: custom parsers must be synchronous.',
-    actual,
-    reproduced: result.status === 'unsupported',
-    timeline: [
-      { level: 'info', message: 'Configured parser returned Promise.resolve(valid envelope).' },
-      { level: 'info', message: `getItemResult("demo") returned ${actual}.` },
-    ],
-  };
-}
-
-export function installIntentionalRejectionListener(target: RejectionTarget, intentionalReason: unknown) {
-  let capturedReason: unknown;
-  const listener = (event: RejectionEventLike) => {
-    if (event.reason !== intentionalReason) return;
-    capturedReason = event.reason;
-    event.preventDefault();
-  };
-  target.addEventListener('unhandledrejection', listener);
-
-  return {
-    getCapturedReason: () => capturedReason,
-    dispose: () => target.removeEventListener('unhandledrejection', listener),
-  };
+export interface RejectionCapture {
+  getCapturedReason(): unknown;
+  dispose(): void;
 }
 
 export async function runRejectedParserCase(
-  target = globalThis as unknown as RejectionTarget,
+  target: RejectionTarget = globalThis as unknown as RejectionTarget,
 ): Promise<ReproductionCase> {
   const rejection = new Error('decode failed');
   const capture = installIntentionalRejectionListener(target, rejection);
+
   try {
     const storage = createStorage({
       storage: createMemoryStorage(),
@@ -83,6 +42,7 @@ export async function runRejectedParserCase(
         parse: () => Promise.reject(rejection),
       },
     });
+
     storage.setItem('demo', 'raw bytes');
     const result = storage.getItemResult('demo');
     await nextTurn();
@@ -111,14 +71,22 @@ export async function runRejectedParserCase(
   }
 }
 
-export async function runReproduction(): Promise<ReproductionResult> {
-  const resolved = runResolvedParserCase();
-  const rejected = await runRejectedParserCase();
-  return { resolved, rejected, timeline: [...resolved.timeline, ...rejected.timeline] };
-}
+export function installIntentionalRejectionListener(
+  target: RejectionTarget,
+  intentionalReason: unknown,
+): RejectionCapture {
+  let capturedReason: unknown;
+  const listener = (event: RejectionEventLike) => {
+    if (event.reason !== intentionalReason) return;
+    capturedReason = event.reason;
+    event.preventDefault();
+  };
+  target.addEventListener('unhandledrejection', listener);
 
-function validEnvelope() {
-  return { __us: true, version: 1, value: 'valid value', expiry: null };
+  return {
+    getCapturedReason: () => capturedReason,
+    dispose: () => target.removeEventListener('unhandledrejection', listener),
+  };
 }
 
 function nextTurn(): Promise<void> {
